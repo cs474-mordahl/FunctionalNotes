@@ -1,0 +1,15 @@
+A farmer had three daughters. And he decided to test his children. Send them off on a little errand. 
+
+To each of them he gave the following number of eggs.
+
+Daughter #1 got 15 eggs.
+
+Daughter #2 got 50 eggs.
+
+Daughter #3 got 85 eggs.
+
+The farmer told them they each had to go their separate ways and sell these eggs. They each had to sell the eggs for the same price. And they had to sell all of their eggs before returning home. And they somehow had to return with the same amount of money. And the daughters were not allowed to have any contact with each other to exchange money, or eggs.
+
+So each daughter was tasked to sell their specific amount of eggs, 15, 50 or 85, charging the same price, and somehow return home with the same amount of money. 
+
+How did they do it?
