@@ -1,0 +1,5 @@
+Simplify the following polynomial.
+
+(x + a) * (x - b) * (x + c) * ... * (x - x) * (x + y) * (x - z)
+
+

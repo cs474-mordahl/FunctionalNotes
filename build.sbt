@@ -1,4 +1,4 @@
-val scala3Version = "3.6.3"
+val scala3Version = "3.6.4"
 
 lazy val root = project
   .in(file("."))
@@ -15,7 +15,8 @@ lazy val root = project
       "-Wvalue-discard",
       "-deprecation",
       "-feature",
-      "-source:future"
+      "-source:future",
+      "-Vprint:typer"
     ),
 
     // Iron for strong type constraints
