@@ -7,8 +7,12 @@ trait Monoid[T] extends Semigroup[T]:
 
 object Monoid:
   given Monoid[Int]:
+    // Identity property means
+    // forAll x: Int: combine(x, 0) = x
+    // forAll x: Int: combine(0, x) = x
     def combine(t1: Int, t2: Int): Int = t1 + t2
     def identity                       = 0
+  end given
 
   given Monoid[Double]:
     def combine(t1: Double, t2: Double): Double = t1 + t2

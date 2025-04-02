@@ -1,71 +1,68 @@
 import edu.uic.cs474.spring25.inclass.functional.monoid.*
+import edu.uic.cs474.spring25.inclass.functional.monoid.Monoid.given
 import edu.uic.cs474.spring25.inclass.functional.semigroup.Semigroup
 
 import math.*
 
+trait KeyValueStore[F[_, _]]:
+  def get[K, V](f: F[K, V])(k: K): Option[V]
+  def put[K, V](f: F[K, V])(k: K, v: V): F[K, V]
+  def getOrElse[K, V](f: F[K, V])(k: K, default: V): V
+  def values[K, V](f: F[K, V]): Iterable[V]
+  def keys[K, V](f: F[K, V]): Iterable[K]
+end KeyValueStore
+
+given KeyValueStore[Map] with
+  def get[K, V](f: Map[K, V])(k: K): Option[V]       = f.get(k)
+  def put[K, V](f: Map[K, V])(k: K, v: V): Map[K, V] = f + (k -> v)
+  def getOrElse[K, V](f: Map[K, V])(k: K, default: V): V =
+    f.getOrElse(k, default)
+  def values[K, V](f: Map[K, V]): Iterable[V] = f.values
+  def keys[K, V](f: Map[K, V]): Iterable[K]   = f.keys
+end given
+
 // --- FIRST IMPLEMENTATION: handle a specific counter structure ---
-{
-  final case class GCounter(counters: Map[String, Int]):
-    def increment(machine: String, amount: Int): GCounter =
-      GCounter(counters + (machine -> (counters(machine) + amount)))
+final case class GCounter[F[_, _], K, V](counters: F[K, V]):
+  def increment(machine: K, amount: V)(using
+      m: Monoid[V],
+      f: KeyValueStore[F]
+  ): GCounter[F, K, V] =
+    GCounter(f.put(counters)(
+      machine,
+      f.getOrElse(counters)(machine, m.identity) |+| amount
+    ))
 
-    def merge(that: GCounter): GCounter =
-      val inner =
-        (for
-          k <- this.counters.keySet
-        yield k -> math.max(this.counters(k), that.counters(k))).toMap
-      GCounter(inner)
-    end merge
+  def merge(that: GCounter[F, K, V])(using
+      b: BoundedSemilattice[V],
+      f: KeyValueStore[F]
+  ): GCounter[F, K, V] =
+    val inner: Iterable[(K, V)] =
+      for
+        k <- f.keys(this.counters)
+      yield k -> (f.getOrElse(counters)(
+        k,
+        b.identity
+      ) |+| f.getOrElse(that.counters)(k, b.identity))
 
-    def total: Int = counters.values.sum
-  end GCounter
+    var res: F[K, V] = this.counters
+    for
+      (k, v) <- inner
+    do
+      res = f.put(res)(k, v)
 
-  var a = GCounter(Map("A" -> 0, "B" -> 0))
-  var b = GCounter(Map("A" -> 0, "B" -> 0))
-  a = a.increment("A", 1)
-  a
-  b = b.increment("B", 2)
-  b
-  a.merge(b)
-}
+    GCounter(res)
+  end merge
 
-// That's great and all, but our GCounter only works with a specific data structure, Map[String, Int]. As programmers, we want our solutions to be as general as possible (so we don't have to write the code again!) Therefore, let's abstract our implementation to work with a map from any key (K) to any value (V).
+  def total(using m: Monoid[V], f: KeyValueStore[F]): V =
+    f.values(counters).fold(m.identity)(_ |+| _)
+end GCounter
 
-// trait KeyValueStore[F[_, _]]:
-//   def put[K, V](f: F[K, V])(k: K, v: V): F[K, V]
-//   def get[K, V](f: F[K, V])(k: K): Option[V]
-//   def getOrElse[K, V](f: F[K, V])(k: K, default: V): V
-//   def values[K, V](f: F[K, V]): List[V]
-// end KeyValueStore
-
-// final case class GCounter3[F[_, _], A, B](counters: F[A, B]):
-//   def increment(machine: A, amount: B)(using
-//       CommutativeMonoid[B],
-//       KeyValueStore[F]
-//   ): GCounter2[A, B] =
-//     GCounter2(???)
-
-//   def merge(that: GCounter2[A, B])(using
-//       Ord[B, B],
-//       KeyValueStore[F]
-//   ): GCounter2[A, B] =
-//     val inner =
-//       (for
-//         k <- this.counters.keySet
-//       yield k -> max(this.counters(k), that.counters(k))).toMap
-//     GCounter2(inner)
-//   end merge
-
-//   def total(using m: BoundedSemilattice[B], KeyValueStore[F]): B =
-//     counters.values.foldLeft(m.identity)(_ |+| _)
-// end GCounter3
-
-// var c = GCounter2(Map("A" -> 0.6, "B" -> 0.1))
-// var d = GCounter2(Map("A" -> 0.6, "B" -> 0.1))
-// c = c.increment("A", 2)
-// c
-// d = d.increment("B", 1)
-// d
-// val x = c.merge(d)
-// x
-// x.total
+var a: GCounter[Map, String, List[String]] =
+  GCounter(Map("A" -> List("192.168.0.1"), "B" -> List()))
+var b: GCounter[Map, String, List[String]] =
+  GCounter(Map("A" -> List(), "B" -> List()))
+a = a.increment("A", List("10.0.0.1"))
+a
+b = b.increment("B", List("192.168.0.1"))
+b
+a.merge(b)
