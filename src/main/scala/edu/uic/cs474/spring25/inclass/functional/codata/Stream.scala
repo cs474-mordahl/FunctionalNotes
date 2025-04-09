@@ -25,10 +25,10 @@ end Stream
 
 // An infinite stream of ones.
 val ones: Stream[Int] = new Stream[Int]:
-  lazy val head =
+  lazy val head: Int =
     println("Getting the head")
     1
-  lazy val tail =
+  lazy val tail: Stream[Int] =
     println("Getting the tail")
     ones
 
@@ -44,7 +44,7 @@ val naturals: Stream[Int] = new Stream[Int]:
 // An infinitely alternating stream of 1s and -1s
 val alternating: Stream[Int] = new Stream[Int]:
   lazy val head = 1
-  lazy val tail = head match
+  lazy val tail: Stream[Int] = head match
     case -1 => new Stream[Int]:
         def head: Int         = 1
         def tail: Stream[Int] = alternating

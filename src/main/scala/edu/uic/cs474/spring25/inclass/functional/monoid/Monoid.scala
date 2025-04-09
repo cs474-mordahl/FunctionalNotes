@@ -2,6 +2,9 @@ package edu.uic.cs474.spring25.inclass.functional.monoid
 
 import edu.uic.cs474.spring25.inclass.functional.semigroup.Semigroup
 
+def identity[T](using Monoid[T]): T =
+  summon[Monoid[T]].identity
+
 trait Monoid[T] extends Semigroup[T]:
   def identity: T
 

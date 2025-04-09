@@ -12,8 +12,8 @@ object Show:
     def _show(i: Int): String = i.toString()
 
   given i: Int = 42
-  def printAnswerToTheUniverse(using i: Int) =
+  def printAnswerToTheUniverse(using i: Int): Unit =
     println(i)
     
-  val y = 3.show
+  val y: String = 3.show
 end Show
