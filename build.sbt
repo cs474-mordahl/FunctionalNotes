@@ -3,7 +3,7 @@ val scala3Version = "3.6.4"
 lazy val root = project
   .in(file("."))
   .settings(
-    name                   := "AlgebraicDataTypes",
+    name                   := "FunctionalNotes",
     version                := "1.0.0",
     scalaVersion           := scala3Version,
     semanticdbEnabled      := true,

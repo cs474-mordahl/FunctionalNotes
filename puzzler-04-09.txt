@@ -1,4 +1,4 @@
-magine you have in front of you two cardboard cubes. They can be any size. You also have a magic marker. There's nothing written on these cubes -- yet. You're going to write something on them with the magic marker. You'd like to use these cubes to represent the date.
+Imagine you have in front of you two cardboard cubes. They can be any size. You also have a magic marker. There's nothing written on these cubes -- yet. You're going to write something on them with the magic marker. You'd like to use these cubes to represent the date.
 
 For example, if today is the 3rd of the month, the first cube would have a zero and the second cube would have a three. If it was the 22nd of the month, the first cube would have a two, and the second cube would have a two.
 

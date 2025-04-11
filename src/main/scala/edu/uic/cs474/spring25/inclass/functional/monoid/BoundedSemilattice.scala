@@ -1,5 +1,11 @@
-package edu.uic.cs474.spring25.inclass.functional.monoid
+package edu.uic.cs474.spring25.inclass.functional
+package monoid
 
+import typeclasses.Ord
+
+/** A BoundedSemilattice is a CommutativeMonoid with the additional
+  * constraint that its combine operation must be idempotent.
+  */
 trait BoundedSemilattice[T] extends CommutativeMonoid[T]
 
 object BoundedSemilattice:
@@ -7,7 +13,7 @@ object BoundedSemilattice:
     def combine(t1: Int, t2: Int): Int = math.max(t1, t2)
     def identity: Int                  = Int.MinValue
 
-  given [T] => BoundedSemilattice[Set[T]]:
+  given setSemilattice: [T] => BoundedSemilattice[Set[T]]:
     def combine(t1: Set[T], t2: Set[T]): Set[T] = t1.union(t2)
     def identity: Set[T]                        = Set.empty[T]
 
