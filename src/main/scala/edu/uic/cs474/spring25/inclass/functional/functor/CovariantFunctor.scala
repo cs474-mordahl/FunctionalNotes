@@ -1,7 +1,5 @@
 package edu.uic.cs474.spring25.inclass.functional.functor
 
-import edu.uic.cs474.spring25.inclass.functional.monoid.Monoid
-
 /** A covariant functor has two laws that it needs to follow:
   *    1. Identity (Identity function: a => a)
   *       for any k, k.map(a => a) == k

@@ -3,14 +3,14 @@ package edu.uic.cs474.spring25.inclass
 given Show[Double]:
   def _show(t: Double): String = t.toString()
 
-given [T](using Show[T]): Show[Option[T]] with
+given [T] => (Show[T]) => Show[Option[T]]:
   def _show(t: Option[T]): String =
     t match
       case Some(t) => s"Some(${t.show})"
       case None    => "None"
 end given
 
-given [T](using Show[T]): Show[List[T]] with
+given [T] => (Show[T]) => Show[List[T]]:
   def _show(t: List[T]): String =
     t match
       case h :: t => s"${h.show} :: ${t.show}"

@@ -1,8 +1,6 @@
 package edu.uic.cs474.spring25.inclass.functional
 package monoid
 
-import typeclasses.Ord
-
 /** A BoundedSemilattice is a CommutativeMonoid with the additional
   * constraint that its combine operation must be idempotent.
   */

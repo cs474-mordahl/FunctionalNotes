@@ -116,4 +116,3 @@ object GCounter:
   ex2
   ex3
 end main
-b
