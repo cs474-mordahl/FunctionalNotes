@@ -1,8 +1,10 @@
 package edu.uic.cs474.spring25.inclass.functional
 package casestudies.gcounter.firstattempt
 
-import typeclasses.*
 import math.*
+
+import typeclasses.*
+import typeclasses.Show.*
 
 /** Our first attempt at creating a GCounter.
   * We make `counters` a concrete type; specifically,

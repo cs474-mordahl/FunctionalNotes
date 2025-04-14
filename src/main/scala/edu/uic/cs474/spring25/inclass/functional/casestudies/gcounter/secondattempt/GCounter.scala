@@ -1,11 +1,13 @@
 package edu.uic.cs474.spring25.inclass.functional
 package casestudies.gcounter.secondattempt
 
+import monoid.*
+import monoid.Monoid.*
+
 import monoid.BoundedSemilattice.given
 import monoid.CommutativeMonoid.given
 import typeclasses.*
-import monoid.*
-import monoid.Monoid.*
+import typeclasses.Show.*
 
 // Second implmentation: handle any map
 final case class GCounter[K, V](counters: Map[K, V]):

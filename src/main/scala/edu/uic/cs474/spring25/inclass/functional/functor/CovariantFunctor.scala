@@ -7,7 +7,7 @@ package edu.uic.cs474.spring25.inclass.functional.functor
   *    2. Composition
   *       For two functions f: A -> B, g: B -> C
   *       For a value of type F[A]
-  *       value.map(f).map(g) == value.map(g(f))
+  *       value.map(f).map(g) == value.map(f . g)
   */
 
 trait CovariantFunctor[F[_]]:

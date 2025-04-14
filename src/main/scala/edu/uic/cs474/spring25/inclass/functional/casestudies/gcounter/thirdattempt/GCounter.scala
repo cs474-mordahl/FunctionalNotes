@@ -1,10 +1,9 @@
 package edu.uic.cs474.spring25.inclass.functional
 package casestudies.gcounter.thridattempt
 
-import typeclasses.show
-import monoid.{BoundedSemilattice, CommutativeMonoid, Monoid}
 import monoid.BoundedSemilattice.given
 import monoid.CommutativeMonoid.given
+import monoid.{BoundedSemilattice, CommutativeMonoid, Monoid}
 import typeclasses.Show
 import typeclasses.Show.*
 
