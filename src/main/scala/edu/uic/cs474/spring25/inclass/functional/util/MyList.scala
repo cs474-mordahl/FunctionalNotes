@@ -1,4 +1,4 @@
-package edu.uic.cs474.spring25.inclass.functional.typeclasses
+package edu.uic.cs474.spring25.inclass.functional.util
 
 enum MyList[+T]:
   case NonEmptyList(h: T, tail: MyList[T])

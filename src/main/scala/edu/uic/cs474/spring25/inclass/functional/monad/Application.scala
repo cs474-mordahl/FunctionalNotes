@@ -2,9 +2,9 @@ package edu.uic.cs474.spring25.inclass.functional
 package monad
 
 import Monad.*
-import typeclasses.MyOption
-import typeclasses.MyOption.*
 import typeclasses.Show.*
+import util.MyOption
+import util.MyOption.*
 
 def timesByTwo(i: Int): MyOption[Int] =
   println(s"timesByTwo got $i as input.")

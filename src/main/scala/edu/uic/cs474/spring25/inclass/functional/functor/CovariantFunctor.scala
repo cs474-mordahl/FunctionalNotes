@@ -1,7 +1,8 @@
-package edu.uic.cs474.spring25.inclass.functional.functor
+package edu.uic.cs474.spring25.inclass.functional
+package functor
 
-import edu.uic.cs474.spring25.inclass.functional.typeclasses.MyList
-import edu.uic.cs474.spring25.inclass.functional.typeclasses.MyList.*
+import util.MyList
+import util.MyList.*
 
 /** A covariant functor has two laws that it needs to follow:
   *    1. Identity (Identity function: a => a)

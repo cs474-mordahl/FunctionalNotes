@@ -1,4 +1,7 @@
-import edu.uic.cs474.spring25.inclass.functional.monad.*
+import edu.uic.cs474.spring25.inclass.functional.monad.Monad
+import edu.uic.cs474.spring25.inclass.functional.monad.Monad.*
+import edu.uic.cs474.spring25.inclass.functional.util.MyEither
+import edu.uic.cs474.spring25.inclass.functional.util.MyEither.*
 
 def initialValue = Some(4)
 
@@ -9,10 +12,9 @@ def divideByNine(i: Int): Option[Int] =
 def plusThree(i: Int): Option[Int] =
   if i < 5 then None else Some(i + 3)
 
-// val x = Some(timesByTwo(i => Some(divideByNine(j => plusThree(Some(j))))))
-
-def doAllThree(i: Int)(using m: Monad[Option]): Option[Int] =
-  // timesByTwo(i).flatMap(e => divideByNine(e).flatMap(f => plusThree(f)))
+def doAllThree(i: Int)(using Monad[Option]): Option[Int] =
+  /* This shows how we can use for-comprehensions to simplify many nested calls
+   * to flatMap. */
   for
     e <- timesByTwo(i)
     g <- divideByNine(e)
@@ -20,9 +22,19 @@ def doAllThree(i: Int)(using m: Monad[Option]): Option[Int] =
     j <- timesByTwo(h)
   yield j
 
-  /* timesByTwo(i).flatMap(e => divideByNine(e).flatMap(g => plusThree(g).map(h
-   * => h + 1))) */
+// This is exactly equivalent to the function above; this is how for-comprehensions turn into
+// flatMap and map calls.
+def doAllThreeEquivalent(i: Int)(using m: Monad[Option]): Option[Int] =
+  timesByTwo(i).flatMap(e =>
+    divideByNine(e).flatMap(g =>
+      plusThree(g).flatMap(h => timesByTwo(h).map(j => j))
+    )
+  )
 
-/* timesByTwo(i) match case None => None case Some(value) => divideByNine(value)
- * match case None => None case Some(value) => plusThree(value) match case None
- * => None case Some(value) => Some(value) */
+// ***** EITHER PRACTICE *****
+val x: MyEither[String, Int] = 0.asRight[String]
+val y = x.flatMap(i =>
+  if i == 0 then "Cannot divide by zero".asLeft[Int]
+  else (100 / i).asRight[String]
+).flatMap(i => (i * 4).asRight[String])
+println(y)

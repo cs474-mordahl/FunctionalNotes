@@ -1,7 +1,8 @@
 package edu.uic.cs474.spring25.inclass.functional
 package typeclasses
 
-import MyOption.{MyNone, MySome}
+import util.MyOption
+import util.MyOption.{MyNone, MySome}
 
 trait Show[T]:
   def s(t: T): String
