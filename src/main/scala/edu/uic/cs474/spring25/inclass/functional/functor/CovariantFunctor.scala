@@ -1,5 +1,8 @@
 package edu.uic.cs474.spring25.inclass.functional.functor
 
+import edu.uic.cs474.spring25.inclass.functional.typeclasses.MyList
+import edu.uic.cs474.spring25.inclass.functional.typeclasses.MyList.*
+
 /** A covariant functor has two laws that it needs to follow:
   *    1. Identity (Identity function: a => a)
   *       for any k, k.map(a => a) == k
@@ -12,9 +15,12 @@ package edu.uic.cs474.spring25.inclass.functional.functor
 
 trait CovariantFunctor[F[_]]:
   def map[A, B](inst: F[A])(f: A => B): F[B]
-  val identity: List[Int] = List(1, 2, 3).map(a => a)
 
 object CovariantFunctor:
-  given CovariantFunctor[List]:
-    def map[A, B](inst: List[A])(f: A => B): List[B] =
-      inst.map(a => f(a))
+  given CovariantFunctor[MyList]:
+    def map[A, B](inst: MyList[A])(f: A => B): MyList[B] =
+      inst match
+        case NonEmptyList(h, tail) => NonEmptyList(f(h), map(tail)(f))
+        case EmptyList             => EmptyList
+  end given
+end CovariantFunctor

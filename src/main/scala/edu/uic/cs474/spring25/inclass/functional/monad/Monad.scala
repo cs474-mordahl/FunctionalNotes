@@ -2,6 +2,11 @@ package edu.uic.cs474.spring25.inclass.functional
 package monad
 import typeclasses.MyOption
 import typeclasses.MyOption.*
+import typeclasses.MyList.*
+import edu.uic.cs474.spring25.inclass.functional.typeclasses.MyList
+import edu.uic.cs474.spring25.inclass.functional.typeclasses.MyList.*
+import typeclasses.MyEither
+import typeclasses.MyEither.*
 
 /** A Monad provides sequencing behavior, allowing us to compose multiple
   * operations that work on a non-monadic context and returns a monadic context
@@ -10,6 +15,11 @@ import typeclasses.MyOption.*
   * A Monad provides two methods:
   *    - pure[A](a: A): F[A]
   *    - flatMap[A, B](init: F[A])(f: A => F[B]): F[A]
+  *
+  * A Monad has to follow three laws:
+  *    - left identity: pure(a).flatMap(f) = f(a)
+  *    - right identity: x.flatMap(x => pure(x)) = x
+  *    - associativity:
   */
 trait Monad[F[_]]:
   def pure[A](a: A): F[A]
@@ -30,4 +40,22 @@ object Monad:
         case MyNone        => MyNone
         case MySome(value) => f(value)
   end given
+
+  given Monad[MyList]:
+    def pure[A](a: A): MyList[A] = NonEmptyList(a, MyList.EmptyList)
+    def _flatMap[A, B](init: MyList[A])(f: A => MyList[B]): MyList[B] =
+      init match
+        case NonEmptyList(h, tail) => MyList.concat(f(h), _flatMap(tail)(f))
+        case EmptyList             => EmptyList
+  end given
+
+  type RightMyEither[A] = MyEither[String, A]
+  given Monad[RightMyEither]:
+    def pure[A](a: A): RightMyEither[A] = MyEither.asRight[String, A](a)
+    def _flatMap[A, B](init: RightMyEither[A])(f: A => RightMyEither[B])
+        : RightMyEither[B] = init match
+      case Right(b: A)     => f(b)
+      case Left(s: String) => MyEither.asLeft[String, B](s)
+  end given
+
 end Monad
