@@ -1,1 +1,1 @@
-# Data and Codata
+# Functional Programming Notes
