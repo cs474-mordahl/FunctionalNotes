@@ -16,9 +16,9 @@ def plusThree(i: Int): MyOption[Int] =
   println(s"plusThree got $i as input.")
   if i < 5 then MyNone else MySome(i + 3)
 
-object Application:
+object FlatMapSample:
   def doAll(i: Int)(using m: Monad[MyOption]): MyOption[Int] =
-    // timesByTwo(i).flatMap(e => divideByNine(e).flatMap(f => plusThree(f)))
+    // timesByTwo(i).flatMap(e => divideByNine(e).flatMap(g => plusThree(g)))
     for
       e <- timesByTwo(i)
       g <- divideByNine(e)
@@ -38,4 +38,4 @@ object Application:
     val z = doAll(9)
     println(z.show)
   end main
-end Application
+end FlatMapSample

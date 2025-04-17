@@ -4,7 +4,6 @@ package monad
 import util.MyList.*
 import util.MyOption.*
 import util.{MyEither, MyList, MyOption}
-
 import util.MyEither.*
 
 /** A Monad provides sequencing behavior, allowing us to compose multiple
@@ -18,7 +17,8 @@ import util.MyEither.*
   * A Monad has to follow three laws:
   *    - left identity: pure(a).flatMap(f) = f(a)
   *    - right identity: x.flatMap(x => pure(x)) = x
-  *    - associativity:
+  *    - associativity: for any two functions f, g of type X => F[X]
+  *           x.flatMap(f).flatMap(g) == x.flatMap(i => f(i).flatMap(g))
   */
 trait Monad[F[_]]:
   def pure[A](a: A): F[A]
@@ -51,6 +51,7 @@ object Monad:
   // Note that in class, I wrote this by introducing a new type,
   // type myRightEither[B] = MyEither[String, B].
   // Here, I have changed it to use a type lambda, which is equivalent.
+  // [B] =>> MyEither[String, B] yields a type with one "hole," the hole for B.
   given myEitherStringMonad: [B] => Monad[[B] =>> MyEither[String, B]]:
     def pure[A](a: A): MyEither[String, A] = a.asRight[String]
     def _flatMap[A, B](init: MyEither[String, A])(f: A => MyEither[String, B])
