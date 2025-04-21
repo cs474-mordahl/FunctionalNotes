@@ -10,10 +10,6 @@ trait Applicative1[F[_]] extends CovariantFunctor[F]:
     ap(ap(pure((a: A) => (b: B) => (a, b)))(fa))(fb)
 end Applicative1
 
-/** - Left Identity: pure(()).product(fa) == fa
-  * - Right Identity: fa.product(pure()) == fa
-  * - Associativity:
-  */
 trait Applicative2[F[_]] extends CovariantFunctor[F]:
   def pure[A](a: A): F[A]
   def product[A, B](fa: F[A])(fb: F[B]): F[(A, B)]
