@@ -18,9 +18,9 @@ lazy val root = project
       "-source:future",
       "-Vprint:typer"
     ),
-
-    // Iron for strong type constraints
-    libraryDependencies += "io.github.iltotore" % "iron_3" % "2.6.0",
+    libraryDependencies += "org.typelevel" %% "cats-effect" % "3.6.1",
+    libraryDependencies += "org.typelevel" %% "cats-core"   % "2.13.0",
+    libraryDependencies += "org.typelevel" %% "kittens"     % "3.5.0",
 
     // Test Dependencies
     libraryDependencies += "org.scalameta" %% "munit" % "1.1.0" % Test,
