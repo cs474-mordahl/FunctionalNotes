@@ -3,6 +3,7 @@ package monad
 
 import Monad.*
 import typeclasses.Show.*
+import functor.CovariantFunctor.*
 import util.MyOption
 import util.MyOption.*
 
