@@ -24,8 +24,12 @@ import scala.annotation.targetName
   */
 trait Monad[F[_]] extends Applicative[F]:
   def flatMap[A, B](init: F[A])(f: A => F[B]): F[B]
-  def map[A, B](init: F[A])(f: A => B): F[B] =
-    flatMap(init)(i => pure(f(i)))
+
+  // All monads are applicatives, meaning that we can define ap in terms of
+  //  flatMap and pure.
+  def ap[A, B](fa: F[A])(ff: F[A => B]): F[B] =
+    flatMap(ff)(f => flatMap(fa)(a => pure(f(a))))
+
 end Monad
 
 object Monad:

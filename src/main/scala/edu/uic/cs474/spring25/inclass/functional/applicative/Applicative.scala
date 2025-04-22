@@ -29,16 +29,22 @@ import scala.annotation.targetName
 trait Applicative[F[_]] extends CovariantFunctor[F]:
   def pure[A](a: A): F[A]
 
-  def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
+  def ap[A, B](fa: F[A])(ff: F[A => B]): F[B]
 
-  def product[A, B](fa: F[A], fb: F[B]): F[(A, B)]
+  // TODO: Implement product in terms of ap and pure
+  def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] = ???
+
+  // Map can be implemented in terms of ap and pure
+  def map[A, B](inst: F[A])(f: A => B): F[B] = ap(inst)(pure(f))
 
   def map2[A, B, C](fa: F[A], fb: F[B])(f: (A, B) => C): F[C] =
     map(product(fa, fb)): x =>
       x match
         case (_1, _2) => f(_1, _2)
 
-  def map3[A, B, C, D](fa: F[A], fb: F[B], fc: F[C])(f: (A, B, C) => D): F[D]
+  // TODO: Implement map3
+  def map3[A, B, C, D](fa: F[A], fb: F[B], fc: F[C])(f: (A, B, C) => D): F[D] =
+    ???
 end Applicative
 
 object Applicative:
@@ -57,4 +63,8 @@ end Applicative
 
 trait ApplicativeAlt[F[_]] extends CovariantFunctor[F]:
   def pure[A](a: A): F[A]
-  def _product[A, B](fa: F[A], fb: F[B]): F[(A, B)]
+  def product[A, B](fa: F[A], fb: F[B]): F[(A, B)]
+
+  // TODO: implement ap in terms of product and pure
+  def ap[A, B](fa: F[A])(ff: F[A => B]): F[B] = ???
+end ApplicativeAlt

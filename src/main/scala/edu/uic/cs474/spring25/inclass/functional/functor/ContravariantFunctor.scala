@@ -26,7 +26,7 @@ end ContravariantFunctor
  * println(s"I can show doubles: ${doubleShow.s(1.4)}") println(s"I can show
  * ints: ${intShow.s(6)}") end main */
 
-import ContravariantFunctor.*
+import ContravariantFunctor.* 
 
 @main
 def main: Unit =
