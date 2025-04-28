@@ -28,7 +28,7 @@ trait Monad[F[_]] extends Applicative[F]:
   // All monads are applicatives, meaning that we can define ap in terms of
   //  flatMap and pure.
   def ap[A, B](fa: F[A])(ff: F[A => B]): F[B] =
-    flatMap(ff)(f => flatMap(fa)(a => pure(f(a))))
+    flatMap(fa)(a => flatMap(ff)(f => pure(f(a))))
 
 end Monad
 

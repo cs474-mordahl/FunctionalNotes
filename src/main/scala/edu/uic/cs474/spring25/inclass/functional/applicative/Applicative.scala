@@ -31,27 +31,63 @@ trait Applicative[F[_]] extends CovariantFunctor[F]:
 
   def ap[A, B](fa: F[A])(ff: F[A => B]): F[B]
 
-  // TODO: Implement product in terms of ap and pure
-  def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] = ???
+  // Product implemented in terms of ap and pure
+  def product[A, B](fa: F[A], fb: F[B]): F[(A, B)] =
+    ap(fb):
+      ap(fa):
+        pure: (a: A) =>
+          (b: B) => (a, b)
 
-  // Map can be implemented in terms of ap and pure
+  // Map (from functor) can be implemented in terms of ap and pure
   def map[A, B](inst: F[A])(f: A => B): F[B] = ap(inst)(pure(f))
 
+  // Map2, and its generalization to mapN, allows us to take functions that
+  //  accept multiple arguments and apply them to multiple effectful parameters.
   def map2[A, B, C](fa: F[A], fb: F[B])(f: (A, B) => C): F[C] =
     map(product(fa, fb)): x =>
       x match
         case (_1, _2) => f(_1, _2)
 
-  // TODO: Implement map3
+  // Use the same pattern that we used to implement map2. */
   def map3[A, B, C, D](fa: F[A], fb: F[B], fc: F[C])(f: (A, B, C) => D): F[D] =
-    ???
+    def product3(fa: F[A], fb: F[B], fc: F[C]): F[(A, B, C)] =
+      ap(fc):
+        ap(fb):
+          ap(fa):
+            pure: (a: A) =>
+              (b: B) => (c: C) => (a, b, c)
+    map(product3(fa, fb, fc)): (a, b, c) =>
+      f(a, b, c)
+  end map3
 end Applicative
 
+enum MyValidated[+I, +V]:
+  case Valid(v: V)
+  case Invalid(i: I)
+
 object Applicative:
+  given listValidatedApplicative
+      : [V] => Applicative[[V] =>> MyValidated[List[String], V]]:
+    def ap[A, B](fa: MyValidated[List[String], A])(ff: MyValidated[
+      List[String],
+      A => B
+    ]): MyValidated[List[String], B] =
+      import MyValidated.*
+      (fa, ff) match
+        case (Valid(a), Valid(f))     => Valid(f(a))
+        case (Invalid(a), Valid(f))   => Invalid(a)
+        case (Valid(a), Invalid(f))   => Invalid(f)
+        case (Invalid(a), Invalid(f)) => Invalid(a ::: f)
+      end match
+    end ap
+
+    def pure[A](a: A): MyValidated[List[String], A] = ???
+  end listValidatedApplicative
+
   extension [F[_]: Applicative, A](a: F[A])
     @targetName("apSyntax")
     def ap[B](f: F[A => B]): F[B] =
-      summon[Applicative[F]].ap(f)(a)
+      summon[Applicative[F]].ap(a)(f)
     @targetName("map2Syntax")
     def map2[B, C](fb: F[B])(ff: (A, B) => C): F[C] =
       summon[Applicative[F]].map2(a, fb)(ff)
@@ -65,6 +101,9 @@ trait ApplicativeAlt[F[_]] extends CovariantFunctor[F]:
   def pure[A](a: A): F[A]
   def product[A, B](fa: F[A], fb: F[B]): F[(A, B)]
 
-  // TODO: implement ap in terms of product and pure
-  def ap[A, B](fa: F[A])(ff: F[A => B]): F[B] = ???
+  // ap defined in terms of map and product; proof that both formulations of
+  // applicative are equivalent
+  def ap[A, B](fa: F[A])(ff: F[A => B]): F[B] =
+    map(product(fa, ff))(tu => tu._2(tu._1))
+  def map[A, B](inst: F[A])(f: A => B): F[B] = ap(inst)(pure(f))
 end ApplicativeAlt

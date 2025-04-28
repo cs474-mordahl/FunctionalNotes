@@ -1,7 +1,9 @@
 import edu.uic.cs474.spring25.inclass.functional.monad.Monad
 import edu.uic.cs474.spring25.inclass.functional.monad.Monad.*
+import edu.uic.cs474.spring25.inclass.functional.monad.Monad.given
 import edu.uic.cs474.spring25.inclass.functional.util.MyEither
 import edu.uic.cs474.spring25.inclass.functional.util.MyEither.*
+import edu.uic.cs474.spring25.inclass.functional.functor.CovariantFunctor.map
 
 // ***** EITHER PRACTICE *****
 object EitherPractice:
