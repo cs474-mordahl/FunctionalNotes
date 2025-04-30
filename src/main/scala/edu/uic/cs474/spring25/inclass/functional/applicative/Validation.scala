@@ -69,11 +69,16 @@ object ValidationApplication:
   // Problem: Because we are using flatMap here, we get the fail-fast behavior
   //  of monads. We actually don't want that here, because we want to show
   //  **all** of the errors that occur, not just the first.
-  /* val programBroken = firstPart.map: tu => for validName <-
-   * Validation.validateName(tu._1) validOccupation <-
-   * Validation.validateOccupation(tu._2) validColor <-
-   * Validation.validateColor(tu._3) yield (validName, validOccupation,
-   * validColor) */
+  // format: off
+  /*
+  val programBroken = firstPart.map: tu =>
+    for
+      validName       <- Validation.validateName(tu._1)
+      validOccupation <- Validation.validateOccupation(tu._2)
+      validColor      <- Validation.validateColor(tu._3)
+    yield (validName, validOccupation, validColor)
+  */
+  // format: on
   val programFixed = firstPart.map: tu =>
     (
       Validation.validateName(tu._1),

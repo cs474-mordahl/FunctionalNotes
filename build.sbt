@@ -21,8 +21,9 @@ lazy val root = project
     libraryDependencies += "org.typelevel" %% "cats-effect" % "3.6.1",
     libraryDependencies += "org.typelevel" %% "cats-core"   % "2.13.0",
     libraryDependencies += "org.typelevel" %% "kittens"     % "3.5.0",
+    libraryDependencies += "com.softwaremill.magnolia1_3" %% "magnolia" % "1.3.16",
 
     // Test Dependencies
-    libraryDependencies += "org.scalameta" %% "munit" % "1.1.0" % Test,
+    libraryDependencies += "org.scalameta" %% "munit" % "1.1.1" % Test,
     libraryDependencies += "org.scalameta" %% "munit-scalacheck" % "1.1.0" % Test
   )
